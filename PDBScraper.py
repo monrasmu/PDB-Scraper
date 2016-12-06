@@ -1,35 +1,29 @@
-# Hash Table for PDBs
+# PDB Scraper
 # Project is intended to quick search through PDB text files
+# Gives instances of desired motif, as well as those of similar activities
 
 import unittest
 from collections import Counter
 
+aminoAcids = ['GLY', 'ALA', 'VAL', 'LEU', 'ILE', 'PRO', 
+			  'PHE', 'TYR', 'TRP', 'SER', 'THR', 'CYS',
+			  'MET', 'ASN', 'GLN', 'LYS', 'ARG', 'HIS',
+			  'ASP', 'GLU']
+
 
 def pdbScraper():
+	counter = Counter()
+
 	filename = raw_input("Enter the filename you wish to search in: ")
-	file = open(filename + '.pdb', 'r')
-	for line in file.readlines():
-		for word in line:
-			if word == "SEQRES":
-				print word
-				counter = []
-				counter = Counter(word)
-				if word =="SEQRES":
-					break
-		print counter
-
-	"""
-	progress = 0
-        for word in file:
-            progress = self.updateProgressBar(progress, word, len(file))
-
-class pdbHash(string):
-    def __init__(self):
-        self.size = 11
-        self.keys = [None] * self.size
-        self.data = [None] * self.size
-"""
-
+	motif = raw_input("Enter the motif you wish to search (in single letters, no spaces): ")
+	with open(filename + '.pdb', 'r') as file:
+		for line in file:
+			if "SEQRES" in line and any(aa in line for aa in aminoAcids):
+				mylist = line.split()
+				for word in mylist:
+					if word in aminoAcids:
+						counter[word] += 1
+	print counter
 
 
 
@@ -55,19 +49,11 @@ class Test(unittest.TestCase):
 		  SEQRES  18 A  239  GLY ARG LYS VAL GLY ASP ILE ALA SER LYS ARG THR GLY          
 		  SEQRES  19 A  239  ARG GLY GLY ASN GLU """ 
 
-	ex2 = ['1ffk']
-
-	"""
 	def test_pdbScraper(self):
-        for [test_pdb, expected] in self.ex2:
-            actual = pdb_Scraper(test_pdb)
-            self.assertEqual(actual, expected)
+		for [test_pdb, expected] in self.ex1:
+			actual = pdb_Scraper(test_pdb)
+			self.assertEqual(actual, expected)
 
-    def test_pdbHash(self):
-        for [test_pdb, expected] in self.ex1:
-            actual = pdb_Hash(test_pdb)
-            self.assertEqual(actual, expected)
-    """
 
 if __name__ == "__main__":
 	pdbScraper()
