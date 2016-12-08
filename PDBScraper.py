@@ -7,7 +7,11 @@
 
 import unittest
 from collections import Counter
+#from termcolor import colored, cprint
+from colorama import init, Fore
 
+
+# !OJO! Get rid of and just use AAKEys?
 aminoAcids = ['GLY', 'ALA', 'VAL', 'LEU', 'ILE', 'PRO', 
 			  'PHE', 'TYR', 'TRP', 'SER', 'THR', 'CYS',
 			  'MET', 'ASN', 'GLN', 'LYS', 'ARG', 'HIS',
@@ -25,17 +29,20 @@ aminoAcidKeys = {'G':'GLY', 'A':'ALA', 'V':'VAL', 'L':'LEU', 'I':'ILE',
 
 
 def pdbScraper():
+	init()
 	counter = Counter()
 	motifKeys = []
 
 	filename = raw_input("Enter the filename you wish to search in: ")
-	motif = raw_input("Enter the motif you wish to search (in single letters, no spaces): ")
+	motif = raw_input("Enter the motif you wish to search (in capital letters, no spaces): ")
 	
 	# Take user input and assign it to 3-letter vals
 	for char in motif:
-		#if char in aminoAcidKeys:
-		motifKeys.append(aminoAcidKeys[char])
-	print motifKeys,'\n'
+		try:
+			motifKeys.append(aminoAcidKeys[char])
+		except:
+			print "***Incorrect user input***"
+			break
 
 	with open(filename + '.pdb', 'r') as file:
 		for line in file:
@@ -45,9 +52,8 @@ def pdbScraper():
 				for word in mylist:
 					if word in aminoAcids:
 						counter[word] += 1
-
-	print counter
-
+	
+	#print(Fore.RED + string)
 
 
 
